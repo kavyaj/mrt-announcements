@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Singapore MRT Announcements: Tap a Station, Hear the Train</title>
+<meta name="description" content="An interactive Singapore MRT map for little train fans. Tap any of 143 stations to hear it announced, then the doors closing. Made by a mum for her son.">
+<link rel="canonical" href="https://kavyaj.github.io/mrt-announcements/">
+<meta name="theme-color" content="#16181d">
+<meta name="author" content="Kavya">
+<meta name="keywords" content="Singapore MRT, MRT announcements, next station, MRT map for kids, train sounds, Circle Line, SMRT, toddler train game">
+
+<!-- social sharing -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MRT Announcements">
+<meta property="og:title" content="Singapore MRT Announcements: Tap a Station, Hear the Train">
+<meta property="og:description" content="An interactive Singapore MRT map for little train fans. Tap a station, hear the announcement and the doors closing.">
+<meta property="og:url" content="https://kavyaj.github.io/mrt-announcements/">
+<meta property="og:image" content="https://kavyaj.github.io/mrt-announcements/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="MRT Announcements: Tap a Singapore MRT station. Hear the train.">
+<meta property="og:locale" content="en_SG">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:creator" content="@kavyaj93">
+<meta name="twitter:title" content="Singapore MRT Announcements: Tap a Station, Hear the Train">
+<meta name="twitter:description" content="An interactive Singapore MRT map for little train fans. Tap a station, hear the announcement and the doors closing.">
+<meta name="twitter:image" content="https://kavyaj.github.io/mrt-announcements/og-image.png">
+
+<!-- app / icons -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="MRT">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="icon-32.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="preload" href="fonts/LTAIdentity-Medium.woff2" as="font" type="font/woff2" crossorigin>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "MRT Announcements",
+  "url": "https://kavyaj.github.io/mrt-announcements/",
+  "description": "An interactive Singapore MRT map for young train fans: tap any station to hear it announced, then the doors closing.",
+  "applicationCategory": "EducationalApplication",
+  "operatingSystem": "Any (web browser)",
+  "inLanguage": "en-SG",
+  "isAccessibleForFree": true,
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "SGD" },
+  "audience": { "@type": "PeopleAudience", "suggestedMinAge": 2 },
+  "image": "https://kavyaj.github.io/mrt-announcements/og-image.png",
+  "creator": {
+    "@type": "Person",
+    "name": "Kavya",
+    "sameAs": ["https://www.linkedin.com/in/kavya-jahagirdar/", "https://x.com/kavyaj93"]
+  }
+}
+</script>
+
+<!-- privacy-friendly visitor counts (no cookies) -->
+<script data-goatcounter="https://mrtannouncements.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+<style>
+  @font-face {
+    font-family: "LTA Identity";
+    src: url("fonts/LTAIdentity-Medium.woff2") format("woff2");
+    font-display: swap;
+  }
+  :root {
+    --sea: #d6e9f1;
+    --sea-deep: #c3dde9;
+    --land: #fbfaf6;
+    --ink: #1d1d1b;
+    --ink-2: #4b5058;
+    --muted: #8a9099;
+    --night: #16181d;
+    --night-2: #23262d;
+    --glass: rgba(255, 255, 255, .82);
+    --amber: #ffb52e;
+    --radius: 20px;
+    --shadow-sm: 0 2px 8px rgba(22, 24, 29, .08);
+    --shadow: 0 10px 30px rgba(22, 24, 29, .16), 0 2px 6px rgba(22, 24, 29, .08);
+    --display: "LTA Identity", "Helvetica Neue", Arial, sans-serif;
+    --ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    --safe-t: env(safe-area-inset-top); --safe-b: env(safe-area-inset-bottom);
+    --safe-l: env(safe-area-inset-left); --safe-r: env(safe-area-inset-right);
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    margin: 0; height: 100%; overflow: hidden; color: var(--ink); font-family: var(--display);
+    background: radial-gradient(120% 90% at 50% 40%, var(--sea) 0%, var(--sea-deep) 100%);
+    -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; overscroll-behavior: none;
+  }
+  button { font: inherit; color: inherit; cursor: pointer; }
+
+  /* ================= map ================= */
+  #map { position: fixed; inset: 0; width: 100%; height: 100%; touch-action: none; display: block; }
+  .land { fill: var(--land); filter: url(#landShadow); }
+  .casing { fill: none; stroke: var(--land); stroke-width: 11; stroke-linecap: round; stroke-linejoin: round; }
+  .line { fill: none; stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; transition: opacity .3s; }
+  .stn { fill: #fff; stroke-width: 3; }
+  .ix { fill: #fff; stroke: var(--ink); stroke-width: 2.6; }
+  .halo { opacity: .28; transform-box: fill-box; transform-origin: center; animation: breathe 2.4s ease-in-out infinite; }
+  @keyframes breathe { 0%, 100% { transform: scale(.75); opacity: .35; } 50% { transform: scale(1.15); opacity: .12; } }
+  .lbl { font-size: 10px; fill: var(--ink-2); paint-order: stroke; stroke: var(--land); stroke-width: 3px; stroke-linejoin: round; transition: opacity .3s; }
+  .lbl.ixl { font-size: 11px; fill: var(--ink); }
+  .lbl.has { fill: var(--ink); font-size: 11.5px; }
+  .dim { opacity: .12; }
+  .halo.dim { visibility: hidden; }
+  .ring { fill: none; stroke-width: 4; transform-box: fill-box; transform-origin: center; animation: ripple 1.3s ease-out infinite; }
+  @keyframes ripple { from { transform: scale(1); opacity: .9; } to { transform: scale(3.4); opacity: 0; } }
+  .picked { transform-box: fill-box; transform-origin: center; animation: pop .35s cubic-bezier(.3, 1.6, .5, 1); }
+  @keyframes pop { from { transform: scale(.4); } to { transform: scale(1); } }
+
+  /* ================= top bar ================= */
+  #bar {
+    position: fixed; z-index: 3; top: calc(12px + var(--safe-t)); left: calc(12px + var(--safe-l)); right: calc(12px + var(--safe-r));
+    display: flex; align-items: center; gap: 12px; pointer-events: none;
+  }
+  #bar > * { pointer-events: auto; }
+  .brand {
+    display: flex; align-items: center; gap: 12px; padding: 8px 18px 8px 8px; border-radius: var(--radius);
+    background: var(--glass); -webkit-backdrop-filter: blur(14px) saturate(1.4); backdrop-filter: blur(14px) saturate(1.4);
+    box-shadow: var(--shadow-sm);
+  }
+  .logo { width: 44px; height: 44px; border-radius: 13px; background: var(--night); display: grid; place-items: center; }
+  .logo svg { width: 26px; height: 26px; }
+  .brand .title { margin: 0; font-size: 21px; font-weight: normal; line-height: 1.05; letter-spacing: .2px; }
+  .brand small { display: block; font-size: 12px; color: var(--muted); letter-spacing: .6px; }
+  .chips {
+    display: flex; gap: 6px; padding: 7px; border-radius: var(--radius); margin-left: auto;
+    background: var(--glass); -webkit-backdrop-filter: blur(14px) saturate(1.4); backdrop-filter: blur(14px) saturate(1.4);
+    box-shadow: var(--shadow-sm);
+  }
+  .chip {
+    border: 0; border-radius: 12px; min-width: 50px; height: 42px; padding: 0 10px; color: #fff; font-size: 17px;
+    background: var(--c); transition: transform .15s, opacity .2s, box-shadow .2s;
+  }
+  .chip:active { transform: scale(.94); }
+  .chips.focused .chip:not(.on) { opacity: .3; }
+  .chip.on { box-shadow: 0 0 0 3px #fff, 0 0 0 5px var(--c); }
+  .round {
+    width: 56px; height: 56px; border-radius: 50%; border: 0; display: grid; place-items: center; flex: none;
+    background: var(--glass); -webkit-backdrop-filter: blur(14px) saturate(1.4); backdrop-filter: blur(14px) saturate(1.4);
+    box-shadow: var(--shadow-sm); transition: transform .15s;
+  }
+  .round:active { transform: scale(.92); }
+  .round svg { width: 24px; height: 24px; }
+  @media (max-width: 760px) { .chips { display: none; } .brand small { display: none; } #fit { margin-left: auto; } }
+
+  /* ================= announcement panel (in-train display) ================= */
+  #panel {
+    position: fixed; z-index: 3; left: 50%; bottom: calc(16px + var(--safe-b));
+    width: min(640px, calc(100% - 32px)); transform: translate(-50%, calc(100% + 40px));
+    transition: transform .45s cubic-bezier(.2, .9, .25, 1.05);
+    background: linear-gradient(180deg, var(--night-2), var(--night)); color: #fff; border-radius: 24px;
+    box-shadow: 0 18px 50px rgba(0, 0, 0, .35); overflow: hidden;
+    display: grid; grid-template-columns: 10px 1fr auto; pointer-events: none;
+  }
+  #panel.show { transform: translate(-50%, 0); }
+  #panel .accent { background: var(--c, #888); }
+  #panel .body { padding: 16px 20px 18px; min-width: 0; }
+  #panel .kicker {
+    font-family: var(--ui); font-size: 13px; font-weight: 700; letter-spacing: 2.2px; text-transform: uppercase; color: var(--amber);
+    display: flex; align-items: center; gap: 10px; min-height: 18px;
+  }
+  #panel .kicker .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--amber); animation: blink 1s steps(2) infinite; }
+  @keyframes blink { 50% { opacity: .15; } }
+  #panel .name { font-size: clamp(30px, 6vw, 46px); line-height: 1.1; margin: 6px 0 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #panel .codes { display: flex; gap: 6px; flex-wrap: wrap; }
+  .badge {
+    display: inline-flex; align-items: stretch; border-radius: 8px; overflow: hidden; font-size: 17px; line-height: 1;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, .9);
+  }
+  .badge b { font-weight: normal; background: var(--c); color: #fff; padding: 5px 6px 5px 8px; }
+  .badge i { font-style: normal; background: #fff; color: var(--ink); padding: 5px 8px 5px 6px; }
+  #panel .track { position: relative; height: 4px; margin-top: 16px; border-radius: 2px; background: rgba(255, 255, 255, .14); }
+  #panel .track .fill { position: absolute; inset: 0 auto 0 0; width: 0; border-radius: 2px; background: var(--c); }
+  #panel .track .train {
+    position: absolute; top: 50%; left: 0; width: 18px; height: 18px; margin: -9px 0 0 -9px; border-radius: 50%;
+    background: #fff; box-shadow: 0 0 0 4px var(--c);
+  }
+  #panel.run .track .fill { width: 100%; transition: width var(--dur) linear; }
+  #panel.run .track .train { left: 100%; transition: left var(--dur) linear; }
+
+  /* doors */
+  #panel .doors { width: 110px; display: grid; place-items: center; padding-right: 18px; }
+  .door-frame {
+    position: relative; width: 74px; height: 92px; border-radius: 12px 12px 4px 4px; overflow: hidden;
+    background: linear-gradient(180deg, #5d6470, #3a3f48); box-shadow: inset 0 0 0 3px #7c8491;
+  }
+  .door-frame::before {  /* the platform view seen through open doors */
+    content: ""; position: absolute; inset: 3px; background: linear-gradient(180deg, #9ad0e6, #e9f4f8 60%, #c9c3b3 60%);
+  }
+  .leaf {
+    position: absolute; top: 3px; bottom: 3px; width: calc(50% - 3px); background: linear-gradient(180deg, #e8ebef, #c9ced6);
+    transition: transform .9s cubic-bezier(.5, 0, .3, 1);
+  }
+  .leaf::after {  /* window */
+    content: ""; position: absolute; top: 12px; left: 8px; right: 8px; height: 30px; border-radius: 5px; background: #8fc3da;
+    box-shadow: inset 0 0 0 2px #aab1bb;
+  }
+  .leaf.l { left: 3px; transform: translateX(-100%); border-right: 2px solid #ffcc33; }
+  .leaf.r { right: 3px; transform: translateX(100%); border-left: 2px solid #ffcc33; }
+  #panel.closing .leaf { transform: translateX(0); transition-duration: var(--close, 2.4s); }
+  #panel.closing .door-frame { animation: flash .5s steps(2) infinite; }
+  @keyframes flash { 50% { box-shadow: inset 0 0 0 3px var(--amber); } }
+  @media (max-width: 520px) { #panel .doors { width: 84px; padding-right: 12px; } .door-frame { width: 58px; height: 74px; } }
+
+  /* ================= hint toast ================= */
+  #hint {
+    position: fixed; z-index: 2; left: 50%; bottom: calc(24px + var(--safe-b)); transform: translateX(-50%);
+    font-family: var(--ui); font-size: 15px; color: var(--ink-2); background: var(--glass);
+    -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+    padding: 10px 18px; border-radius: 999px; box-shadow: var(--shadow-sm); white-space: nowrap; transition: opacity .6s;
+  }
+  #hint.gone { opacity: 0; }
+
+  /* ================= start screen ================= */
+  #start {
+    position: fixed; inset: 0; z-index: 10; background: var(--night); color: #fff; overflow: hidden;
+    display: grid; place-items: center; text-align: center; transition: opacity .5s, visibility .5s;
+  }
+  #start.gone { opacity: 0; visibility: hidden; }
+  #start svg.sweep { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .sweep path { fill: none; stroke-width: 16; stroke-linecap: round; stroke-dasharray: 2600; stroke-dashoffset: 2600; animation: draw 2.2s cubic-bezier(.6, 0, .2, 1) forwards; opacity: .9; }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+  .hero { position: relative; padding: 24px; }
+  .hero .eyebrow { font-family: var(--ui); font-weight: 700; letter-spacing: 3px; text-transform: uppercase; font-size: 13px; color: var(--amber); }
+  .hero h1 { font-weight: normal; font-size: clamp(40px, 8.4vw, 96px); line-height: 1; margin: 14px 0 12px; letter-spacing: .5px; }
+  .hero p { font-family: var(--ui); font-size: clamp(16px, 2.4vw, 20px); color: #b9bec7; margin: 0 0 36px; }
+  .go {
+    border: 0; border-radius: 999px; padding: 22px 44px 22px 30px; font-size: clamp(26px, 4vw, 34px); color: #fff;
+    background: #009645; display: inline-flex; align-items: center; gap: 16px;
+    box-shadow: 0 10px 0 #006b31, 0 22px 40px rgba(0, 150, 69, .35); transition: transform .1s, box-shadow .1s;
+  }
+  .go:active { transform: translateY(8px); box-shadow: 0 2px 0 #006b31, 0 8px 20px rgba(0, 150, 69, .3); }
+  .go .icon { width: 50px; height: 50px; border-radius: 50%; background: rgba(255, 255, 255, .18); display: grid; place-items: center; }
+  .go svg { width: 30px; height: 30px; }
+  .hero .fine a { color: #b9bec7; }
+  .hero .fine { position: fixed; left: 0; right: 0; bottom: calc(18px + var(--safe-b)); font-family: var(--ui); font-size: 12px; color: #6f7580; }
+
+  /* ================= about sheet ================= */
+  #about {
+    position: fixed; inset: 0; z-index: 11; display: grid; place-items: center; padding: 16px;
+    background: rgba(22, 24, 29, .45); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
+    opacity: 0; visibility: hidden; transition: opacity .25s, visibility .25s;
+  }
+  #about.show { opacity: 1; visibility: visible; }
+  .sheet {
+    width: min(520px, 100%); max-height: calc(100% - 32px); overflow: auto; background: #fff; border-radius: 26px; box-shadow: var(--shadow);
+    padding: 26px 26px 22px; font-family: var(--ui); font-size: 15px; line-height: 1.55; color: var(--ink-2);
+    -webkit-user-select: text; user-select: text; transform: translateY(12px); transition: transform .25s;
+  }
+  #about.show .sheet { transform: none; }
+  .sheet h3 { font-family: var(--display); font-weight: normal; font-size: 30px; color: var(--ink); margin: 0 0 4px; }
+  .sheet h4 { font-size: 12px; letter-spacing: 1.6px; text-transform: uppercase; color: var(--muted); margin: 20px 0 8px; }
+  .sheet p { margin: 0 0 8px; }
+  .sheet a { color: #005ec4; }
+  .legend { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 14px; }
+  .legend div { display: flex; align-items: center; gap: 10px; color: var(--ink); }
+  .legend span { width: 30px; height: 8px; border-radius: 4px; background: var(--c); flex: none; }
+  .sheet .close { margin-top: 20px; width: 100%; border: 0; border-radius: 14px; padding: 14px; background: var(--night); color: #fff; font-family: var(--display); font-size: 19px; }
+</style>
+</head>
+<body>
+
+<!-- ================= map ================= -->
+<svg id="map" xmlns="http://www.w3.org/2000/svg" aria-label="Singapore MRT map">
+  <defs>
+    <filter id="landShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#5b8ea3" flood-opacity=".22"/>
+    </filter>
+  </defs>
+  <g id="world">
+    <g id="landG"></g>
+    <g id="casings"></g>
+    <g id="lines"></g>
+    <g id="halos"></g>
+    <g id="stations"></g>
+    <g id="labels"></g>
+    <g id="fx"></g>
+  </g>
+</svg>
+
+<!-- ================= top bar ================= -->
+<header id="bar">
+  <div class="brand">
+    <div class="logo" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="5" y="2.5" width="14" height="15" rx="4"/><path d="M5 10h14"/><circle cx="9" cy="13.8" r=".6" fill="#fff"/><circle cx="15" cy="13.8" r=".6" fill="#fff"/><path d="M8 21l2-3.5M16 21l-2-3.5"/>
+      </svg>
+    </div>
+    <div><div class="title">MRT Announcements</div><small>Singapore MRT</small></div>
+  </div>
+  <nav class="chips" id="chips" aria-label="Lines"></nav>
+  <button class="round" id="fit" aria-label="Show the whole map">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+  </button>
+  <button class="round" id="info" aria-label="About this page">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v6"/><circle cx="12" cy="7.6" r=".7" fill="currentColor"/></svg>
+  </button>
+</header>
+
+<div id="hint">Tap a station to hear the train · Pinch to zoom</div>
+
+<!-- ================= announcement panel ================= -->
+<section id="panel" aria-live="polite">
+  <div class="accent"></div>
+  <div class="body">
+    <div class="kicker"><span class="dot"></span><span class="k"></span></div>
+    <div class="name"></div>
+    <div class="codes"></div>
+    <div class="track"><div class="fill"></div><div class="train"></div></div>
+  </div>
+  <div class="doors"><div class="door-frame"><div class="leaf l"></div><div class="leaf r"></div></div></div>
+</section>
+
+<!-- ================= start screen ================= -->
+<section id="start">
+  <svg class="sweep" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <path d="M-100 110 C 300 90, 420 220, 700 190 S 1100 70, 1320 120" stroke="#d42e12" style="animation-delay:.05s"/>
+    <path d="M-100 175 C 260 175, 380 270, 680 250 S 1080 170, 1320 200" stroke="#009645" style="animation-delay:.15s"/>
+    <path d="M-100 610 C 240 650, 460 560, 720 590 S 1060 700, 1320 650" stroke="#9900aa" style="animation-delay:.25s"/>
+    <path d="M-100 675 C 280 705, 480 630, 740 655 S 1080 760, 1320 720" stroke="#fa9e0d" style="animation-delay:.35s"/>
+    <path d="M-100 740 C 300 770, 520 700, 760 725 S 1100 820, 1320 790" stroke="#005ec4" style="animation-delay:.45s"/>
+    <path d="M-100 45 C 320 25, 460 150, 720 130 S 1100 15, 1320 50" stroke="#9d5b25" style="animation-delay:.55s"/>
+  </svg>
+  <div class="hero">
+    <div class="eyebrow">Singapore MRT</div>
+    <h1>MRT Announcements</h1>
+    <p>Tap any station on the Singapore MRT map and hear it announced, just like on the train.</p>
+    <button class="go" id="go">
+      <span class="icon"><svg viewBox="0 0 24 24" fill="#fff"><path d="M8 5.5v13l11-6.5z"/></svg></span>
+      Let's ride
+    </button>
+    <div class="fine">Turn the sound up 🔊 &nbsp;·&nbsp; <a href="story.html">Why I made this</a></div>
+  </div>
+</section>
+
+<!-- ================= about ================= -->
+<section id="about" role="dialog" aria-label="About">
+  <div class="sheet">
+    <h3>MRT Announcements</h3>
+    <p>Tap any station to hear its on-board announcement, followed by the doors closing. Pinch to zoom, drag to move around, and tap a line colour to follow just that line.</p>
+    <p>Stations that softly glow have a real recording. More are being added ride by ride.</p>
+    <h4>Lines</h4>
+    <div class="legend" id="legend"></div>
+    <h4>Credits</h4>
+    <p>Typeface: <a href="https://github.com/jglim/IdentityFont" target="_blank" rel="noopener">IdentityFont</a> by jglim, a reconstruction of the LTA Identity typeface.</p>
+    <p>Map redrawn by hand for this page. Stations that glow use real announcements recorded on board; the rest use a voice matched to the announcer.</p>
+    <p>An unofficial fan project, made for a 3-year-old MRT fan. Not affiliated with LTA, SMRT or SBS Transit. The chime, door-closing sound and on-board announcements belong to their operators and are used here non-commercially.</p>
+    <p><a href="story.html">Read the story behind it</a> · <a href="https://www.linkedin.com/in/kavya-jahagirdar/" target="_blank" rel="noopener">LinkedIn</a> · <a href="https://x.com/kavyaj93" target="_blank" rel="noopener">X</a></p>
+    <button class="close" id="closeAbout">Back to the map</button>
+  </div>
+</section>
+
+<script src="network.js"></script>
+<script src="recordings.js"></script>
+<script src="names.js"></script>
+<script>
+// Later: serve audio from the GitHub repo via jsDelivr, e.g. "https://cdn.jsdelivr.net/gh/<user>/<repo>@main/audio/"
+const AUDIO_BASE = "audio/";
+const DOORS = "doors-closing.mp3";
+
+const LINE_INFO = [
+  ["NS", "North-South Line"], ["EW", "East-West Line"], ["NE", "North East Line"],
+  ["CC", "Circle Line"], ["DT", "Downtown Line"], ["TE", "Thomson-East Coast Line"],
+];
+const FAMILY = { CG: "EW", CE: "CC" };           // branches drawn with their parent line
+const fam = id => FAMILY[id] || id;
+
+// Simplified Singapore coastline, in map units (drawn as a smooth closed curve).
+const COAST = [[30,362],[118,322],[186,212],[268,164],[400,184],[520,208],[640,224],[752,184],[852,214],
+  [932,330],[1048,378],[1086,470],[1044,540],[932,612],[802,730],[684,806],[604,846],[470,826],[362,782],
+  [272,684],[140,650],[40,626],[16,484]];
+const SENTOSA = [[378,850],[430,838],[492,846],[500,866],[440,880],[388,874]];
+
+// ---------- helpers ----------
+const NSV = "http://www.w3.org/2000/svg";
+const $ = id => document.getElementById(id);
+const el = (tag, attrs, parent) => {
+  const e = document.createElementNS(NSV, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  parent && parent.appendChild(e);
+  return e;
+};
+const lineColor = code => COLOR[code.replace(/\d+$/, "")];
+
+function smoothPath(pts, closed) {
+  // Catmull-Rom spline -> cubic Bezier segments
+  const n = pts.length, P = i => closed ? pts[(i + n) % n] : pts[Math.max(0, Math.min(n - 1, i))];
+  let d = `M${pts[0]}`;
+  for (let i = 0; i < (closed ? n : n - 1); i++) {
+    const p0 = P(i - 1), p1 = P(i), p2 = P(i + 1), p3 = P(i + 2);
+    d += `C${p1[0] + (p2[0] - p0[0]) / 6},${p1[1] + (p2[1] - p0[1]) / 6} ${p2[0] - (p3[0] - p1[0]) / 6},${p2[1] - (p3[1] - p1[1]) / 6} ${p2}`;
+  }
+  return d + (closed ? "Z" : "");
+}
+
+// ---------- draw the map ----------
+el("path", { d: smoothPath(COAST, true), class: "land" }, $("landG"));
+el("path", { d: smoothPath(SENTOSA, true), class: "land" }, $("landG"));
+
+const lineEls = [];
+for (const l of LINES) {
+  const pts = l.stops.map(([, s]) => ST[s].slice(0, 2));
+  const d = l.smooth ? smoothPath(pts, false) : "M" + pts.join("L");
+  el("path", { d, class: "casing" }, $("casings"));
+  lineEls.push([fam(l.id), el("path", { d, class: "line", stroke: l.color }, $("lines"))]);
+}
+
+const stationLines = {};                          // name -> Set of line families
+for (const l of LINES) for (const [, s] of l.stops) (stationLines[s] ??= new Set()).add(fam(l.id));
+
+const stationEls = [];                            // [name, element] for dimming
+for (const [name, [x, y, side]] of Object.entries(ST)) {
+  const codes = CODES[name], isIx = codes.length > 1, has = !!RECORDINGS[name];
+  const color = lineColor(codes[0]);
+  if (has) stationEls.push([name, el("circle", { cx: x, cy: y, r: 13, class: "halo", fill: color }, $("halos"))]);
+  const g = el("g", {}, $("stations"));
+  if (isIx) el("circle", { cx: x, cy: y, r: 8, class: "ix" }, g);
+  else el("circle", { cx: x, cy: y, r: has ? 6.5 : 5.5, class: "stn", stroke: color }, g);
+  const off = isIx ? 12 : 9;
+  const [tx, ty, anchor] = { r: [x + off, y + 4, "start"], l: [x - off, y + 4, "end"], t: [x, y - off - 2, "middle"], b: [x, y + off + 10, "middle"] }[side];
+  const t = el("text", { x: tx, y: ty, "text-anchor": anchor, class: "lbl" + (isIx ? " ixl" : "") + (has ? " has" : "") }, $("labels"));
+  t.textContent = name;
+  stationEls.push([name, g], [name, t]);
+}
+
+// ---------- line chips & legend ----------
+for (const [id, name] of LINE_INFO) {
+  const b = document.createElement("button");
+  b.className = "chip"; b.textContent = id; b.style.setProperty("--c", COLOR[id]); b.dataset.line = id;
+  b.setAttribute("aria-label", name);
+  b.addEventListener("click", () => focusLine(focused === id ? null : id));
+  $("chips").appendChild(b);
+  const row = document.createElement("div");
+  row.innerHTML = `<span style="--c:${COLOR[id]}"></span>${name}`;
+  $("legend").appendChild(row);
+}
+let focused = null;
+function focusLine(id) {
+  focused = id;
+  $("chips").classList.toggle("focused", !!id);
+  for (const c of $("chips").children) c.classList.toggle("on", c.dataset.line === id);
+  for (const [f, p] of lineEls) p.classList.toggle("dim", !!id && f !== id);
+  for (const [name, e] of stationEls) e.classList.toggle("dim", !!id && !stationLines[name].has(id));
+  if (!id) return animateTo(fit);
+  // zoom to the chosen line
+  const pts = LINES.filter(l => fam(l.id) === id).flatMap(l => l.stops.map(([, s]) => ST[s]));
+  const xs = pts.map(p => p[0]), ys = pts.map(p => p[1]);
+  animateTo(viewFor(Math.min(...xs) - 60, Math.min(...ys) - 40, Math.max(...xs) + 90, Math.max(...ys) + 40));
+}
+
+// ---------- pan & pinch zoom ----------
+const svg = $("map"), world = $("world");
+const BOUNDS = [18, 160, 1082, 880];               // x0, y0, x1, y1 in map units
+let view = { s: 1, tx: 0, ty: 0 }, fit = view, anim = 0;
+
+const topInset = () => $("bar").getBoundingClientRect().bottom + 8;
+function viewFor(x0, y0, x1, y1) {
+  const W = innerWidth, top = topInset(), H = innerHeight - top - 12, pad = 12;
+  const s = Math.min((W - 2 * pad) / (x1 - x0), (H - pad) / (y1 - y0));
+  return { s, tx: (W - (x1 - x0) * s) / 2 - x0 * s, ty: top + (H - (y1 - y0) * s) / 2 - y0 * s };
+}
+function apply() { world.setAttribute("transform", `translate(${view.tx},${view.ty}) scale(${view.s})`); }
+function refit(animate) { fit = viewFor(...BOUNDS); animate ? animateTo(fit) : (view = { ...fit }, apply()); }
+function animateTo(target, ms = 480) {
+  cancelAnimationFrame(anim);
+  const from = { ...view }, t0 = performance.now();
+  const ease = t => 1 - Math.pow(1 - t, 3);
+  const step = now => {
+    const k = ease(Math.min(1, (now - t0) / ms));
+    view = { s: from.s + (target.s - from.s) * k, tx: from.tx + (target.tx - from.tx) * k, ty: from.ty + (target.ty - from.ty) * k };
+    apply();
+    if (k < 1) anim = requestAnimationFrame(step);
+  };
+  anim = requestAnimationFrame(step);
+}
+function zoomAt(cx, cy, factor) {
+  const s = Math.min(Math.max(view.s * factor, fit.s * .9), fit.s * 8), k = s / view.s;
+  view = { s, tx: cx - (cx - view.tx) * k, ty: cy - (cy - view.ty) * k };
+  clampView(); apply();
+}
+function clampView() {                            // keep part of the map on screen
+  const W = innerWidth, H = innerHeight, m = 140, [x0, y0, x1, y1] = BOUNDS;
+  const L = x0 * view.s + view.tx, R = x1 * view.s + view.tx, T = y0 * view.s + view.ty, B = y1 * view.s + view.ty;
+  if (R < m) view.tx += m - R; if (L > W - m) view.tx -= L - (W - m);
+  if (B < m) view.ty += m - B; if (T > H - m) view.ty -= T - (H - m);
+}
+
+const pointers = new Map();
+let gesture = null;
+svg.addEventListener("pointerdown", e => {
+  cancelAnimationFrame(anim);
+  svg.setPointerCapture(e.pointerId);
+  pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  if (pointers.size === 1) gesture = { moved: false, x: e.clientX, y: e.clientY, t: Date.now() };
+  else if (gesture) { gesture.moved = true; gesture.pinch = pinchInfo(); }
+  hideHint();
+});
+svg.addEventListener("pointermove", e => {
+  if (!pointers.has(e.pointerId) || !gesture) return;
+  const prev = pointers.get(e.pointerId);
+  pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  if (pointers.size === 1) {
+    if (Math.hypot(e.clientX - gesture.x, e.clientY - gesture.y) > 10) gesture.moved = true;
+    if (gesture.moved) { view.tx += e.clientX - prev.x; view.ty += e.clientY - prev.y; clampView(); apply(); }
+  } else if (pointers.size === 2 && gesture.pinch) {
+    const p = pinchInfo();
+    view.tx += p.x - gesture.pinch.x; view.ty += p.y - gesture.pinch.y;
+    zoomAt(p.x, p.y, p.d / gesture.pinch.d);
+    gesture.pinch = p;
+  }
+});
+function endPointer(e) {
+  if (!pointers.delete(e.pointerId)) return;
+  if (pointers.size === 0 && gesture) {
+    if (!gesture.moved && Date.now() - gesture.t < 800) tap(e.clientX, e.clientY);
+    gesture = null;
+  } else if (pointers.size === 1 && gesture) gesture.pinch = null;
+}
+svg.addEventListener("pointerup", endPointer);
+svg.addEventListener("pointercancel", endPointer);
+function pinchInfo() {
+  const [a, b] = [...pointers.values()];
+  return { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2, d: Math.max(Math.hypot(a.x - b.x, a.y - b.y), 1) };
+}
+svg.addEventListener("wheel", e => { e.preventDefault(); cancelAnimationFrame(anim); zoomAt(e.clientX, e.clientY, Math.exp(-e.deltaY * .0015)); }, { passive: false });
+document.addEventListener("gesturestart", e => e.preventDefault());   // stop Safari's page zoom
+document.addEventListener("dblclick", e => e.preventDefault());
+$("fit").addEventListener("click", () => focusLine(null));
+addEventListener("resize", () => refit(false));
+
+// ---------- tapping a station ----------
+function tap(cx, cy) {
+  const hit = document.elementFromPoint(cx, cy);   // tapping a station's name counts too
+  if (hit && hit.classList.contains("lbl")) return announce(hit.textContent);
+  let best = null, bestD = 32;                     // forgiving hit area for small fingers
+  for (const [name, [x, y]] of Object.entries(ST)) {
+    const d = Math.hypot(x * view.s + view.tx - cx, y * view.s + view.ty - cy);
+    if (d < bestD) { best = name; bestD = d; }
+  }
+  if (best) announce(best);
+}
+
+let timers = [];
+function announce(name) {
+  const [x, y] = ST[name], codes = CODES[name], rec = RECORDINGS[name];
+  const color = lineColor(codes[0]);
+  timers.forEach(clearTimeout); timers = [];
+
+  // ripple + pop on the map
+  $("fx").replaceChildren();
+  el("circle", { cx: x, cy: y, r: 9, class: "ring", stroke: color }, $("fx"));
+  el("circle", { cx: x, cy: y, r: 9, class: "picked", fill: color, stroke: "#fff", "stroke-width": 3 }, $("fx"));
+
+  // keep the station visible above the panel
+  const sy = y * view.s + view.ty, limit = innerHeight - 230;
+  if (sy > limit) animateTo({ ...view, ty: view.ty - (sy - innerHeight * .45) });
+
+  // fill the panel
+  const p = $("panel");
+  p.style.setProperty("--c", color);
+  p.classList.remove("run", "closing", "show");
+  p.querySelector(".k").textContent = rec && rec.kind === "next" ? "Next station" : "Arriving at";
+  p.querySelector(".name").textContent = name;
+  p.querySelector(".codes").replaceChildren(...codes.map(c => {
+    const b = document.createElement("span");
+    b.className = "badge"; b.style.setProperty("--c", lineColor(c));
+    b.innerHTML = `<b>${c.replace(/\d+$/, "")}</b><i>${c.match(/\d+$/)[0]}</i>`;
+    return b;
+  }));
+  void p.offsetWidth;                              // restart CSS transitions
+  p.classList.add("show");
+
+  // count station taps in GoatCounter (anonymous; shows which stations are favourites)
+  if (window.goatcounter && goatcounter.count) goatcounter.count({ path: "station/" + name, title: name, event: true });
+
+  // real on-board recording if we have one, otherwise the spoken station name
+  const clip = rec ? rec.file : (typeof NAME_CLIPS !== "undefined" ? NAME_CLIPS[name] : null);
+  play(clip).then(([speech, doors]) => {
+    const total = speech + doors;
+    p.style.setProperty("--dur", total + "ms");
+    p.style.setProperty("--close", Math.min(doors, 2600) + "ms");
+    requestAnimationFrame(() => p.classList.add("run"));
+    timers.push(setTimeout(() => { p.querySelector(".k").textContent = "Doors closing"; p.classList.add("closing"); }, speech));
+    timers.push(setTimeout(() => { p.classList.remove("show"); $("fx").replaceChildren(); }, total + 1400));
+  });
+}
+
+// ---------- audio (Web Audio: gapless and reliable on iPad once unlocked) ----------
+let ctx, sources = [];
+const buffers = {};
+const load = file => buffers[file] ??= fetch(AUDIO_BASE + file).then(r => r.arrayBuffer()).then(b => ctx.decodeAudioData(b));
+async function play(file) {
+  sources.forEach(s => { try { s.stop(); } catch {} }); sources = [];
+  if (!ctx) return [0, 2500];
+  let bufs;
+  try { bufs = await Promise.all([file && load(file), load(DOORS)]); } catch { return [0, 2500]; }
+  const gap = .3, t0 = ctx.currentTime + .05;
+  let t = t0, out = [];
+  for (const buf of bufs) {
+    if (!buf) { out.push(0); continue; }
+    const src = ctx.createBufferSource();
+    src.buffer = buf; src.connect(ctx.destination); src.start(t);
+    sources.push(src);
+    out.push((buf.duration + gap) * 1000); t += buf.duration + gap;
+  }
+  return out;
+}
+
+// ---------- start / about ----------
+$("go").addEventListener("click", async () => {
+  try { if (navigator.audioSession) navigator.audioSession.type = "playback"; } catch {}   // ignore the silent switch
+  ctx = new (window.AudioContext || window.webkitAudioContext)();
+  await ctx.resume();
+  $("start").classList.add("gone");
+  [DOORS, ...Object.values(RECORDINGS).map(r => r.file)].forEach(f => load(f).catch(() => {}));
+  setTimeout(hideHint, 6000);
+});
+function hideHint() { $("hint").classList.add("gone"); }
+$("info").addEventListener("click", () => $("about").classList.add("show"));
+$("closeAbout").addEventListener("click", () => $("about").classList.remove("show"));
+$("about").addEventListener("click", e => { if (e.target === $("about")) $("about").classList.remove("show"); });
+
+refit(false);
+</script>
+</body>
+</html>

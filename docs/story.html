@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Our Story: Why a Mum Built a Talking MRT Map for Her Son</title>
+<meta name="description" content="How a 3-year-old's love for Singapore's MRT, a weekly Circle Line ride and an MRT-themed birthday party turned into an interactive map of station announcements.">
+<link rel="canonical" href="https://kavyaj.github.io/mrt-announcements/story.html">
+<meta name="theme-color" content="#16181d">
+<meta name="author" content="Kavya">
+
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="MRT Announcements">
+<meta property="og:title" content="Our Story: Why a Mum Built a Talking MRT Map for Her Son">
+<meta property="og:description" content="A 3-year-old MRT fan, a weekly Circle Line ride and an MRT-themed birthday party.">
+<meta property="og:url" content="https://kavyaj.github.io/mrt-announcements/story.html">
+<meta property="og:image" content="https://kavyaj.github.io/mrt-announcements/images/party-wall-map.jpg">
+<meta property="og:locale" content="en_SG">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:creator" content="@kavyaj93">
+<meta name="twitter:image" content="https://kavyaj.github.io/mrt-announcements/images/party-wall-map.jpg">
+
+<link rel="icon" type="image/png" sizes="32x32" href="icon-32.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="preload" href="fonts/LTAIdentity-Medium.woff2" as="font" type="font/woff2" crossorigin>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Why a mum built a talking MRT map for her son",
+  "description": "How a 3-year-old's love for Singapore's MRT turned into an interactive map of station announcements.",
+  "image": "https://kavyaj.github.io/mrt-announcements/images/party-wall-map.jpg",
+  "mainEntityOfPage": "https://kavyaj.github.io/mrt-announcements/story.html",
+  "inLanguage": "en-SG",
+  "author": {
+    "@type": "Person",
+    "name": "Kavya",
+    "sameAs": ["https://www.linkedin.com/in/kavya-jahagirdar/", "https://x.com/kavyaj93"]
+  },
+  "isPartOf": { "@type": "WebSite", "name": "MRT Announcements", "url": "https://kavyaj.github.io/mrt-announcements/" }
+}
+</script>
+<script data-goatcounter="https://mrtannouncements.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+
+<style>
+  @font-face { font-family: "LTA Identity"; src: url("fonts/LTAIdentity-Medium.woff2") format("woff2"); font-display: swap; }
+  :root {
+    --paper: #fbfaf6; --ink: #1d1d1b; --ink-2: #474c54; --muted: #858b94; --line: #e7e3da;
+    --night: #16181d; --amber: #ffb52e;
+    --ns: #d42e12; --ew: #009645; --ne: #9900aa; --cc: #fa9e0d; --dt: #005ec4; --te: #9d5b25;
+    --display: "LTA Identity", "Helvetica Neue", Arial, sans-serif;
+    --ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--ui); font-size: 18px; line-height: 1.65; }
+  a { color: var(--dt); }
+  img { max-width: 100%; display: block; }
+
+  /* stripe of line colours */
+  .stripe { height: 8px; background: linear-gradient(90deg, var(--ns) 0 16.66%, var(--ew) 0 33.33%, var(--ne) 0 50%, var(--cc) 0 66.66%, var(--dt) 0 83.33%, var(--te) 0); }
+
+  /* nav */
+  nav { max-width: 1040px; margin: 0 auto; padding: 18px 20px; display: flex; align-items: center; gap: 14px; }
+  .home { display: flex; align-items: center; gap: 12px; color: var(--ink); text-decoration: none; font-family: var(--display); font-size: 20px; }
+  .logo { width: 42px; height: 42px; border-radius: 12px; background: var(--night); display: grid; place-items: center; flex: none; }
+  .logo svg { width: 24px; height: 24px; }
+  .cta {
+    margin-left: auto; font-family: var(--display); font-size: 18px; text-decoration: none; color: #fff; background: var(--ew);
+    padding: 11px 20px; border-radius: 999px; box-shadow: 0 4px 0 #006b31; white-space: nowrap;
+  }
+  .cta:active { transform: translateY(3px); box-shadow: 0 1px 0 #006b31; }
+
+  /* hero */
+  header.hero { background: var(--night); color: #fff; position: relative; overflow: hidden; }
+  header.hero svg { position: absolute; inset: 0; width: 100%; height: 100%; opacity: .9; }
+  header.hero .in { position: relative; max-width: 780px; margin: 0 auto; padding: 88px 20px 96px; }
+  .eyebrow { font-weight: 700; letter-spacing: 3px; text-transform: uppercase; font-size: 13px; color: var(--amber); }
+  h1 { font-family: var(--display); font-weight: normal; font-size: clamp(38px, 6.4vw, 64px); line-height: 1.08; margin: 12px 0 18px; }
+  header.hero p { font-size: clamp(18px, 2.2vw, 21px); color: #c6cad1; margin: 0; max-width: 620px; }
+
+  /* article */
+  main { max-width: 720px; margin: 0 auto; padding: 56px 20px 24px; }
+  h2 { font-family: var(--display); font-weight: normal; font-size: clamp(28px, 4vw, 36px); line-height: 1.2; margin: 56px 0 14px; display: flex; align-items: center; gap: 12px; }
+  h2 .code { font-size: .55em; color: #fff; background: var(--c); border-radius: 8px; padding: 4px 9px; flex: none; }
+  p { margin: 0 0 18px; color: var(--ink-2); }
+  .lead { font-size: 21px; color: var(--ink); }
+
+  /* the route that started it all */
+  .route { margin: 28px 0 8px; padding: 26px 22px 20px; background: #fff; border-radius: 22px; box-shadow: 0 1px 0 var(--line), 0 10px 30px rgba(22, 24, 29, .06); }
+  .route ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); position: relative; }
+  .route ol::before { content: ""; position: absolute; left: 16.66%; right: 16.66%; top: 13px; height: 8px; border-radius: 4px; background: var(--cc); }
+  .route li { text-align: center; position: relative; }
+  .route .dot { width: 34px; height: 34px; margin: 0 auto 10px; border-radius: 50%; background: #fff; border: 5px solid var(--cc); }
+  .route li.ix .dot { border-color: var(--ink); border-width: 4px; }
+  .route .codes { display: inline-flex; gap: 4px; margin-bottom: 4px; }
+  .route .badge { font-family: var(--display); font-size: 14px; color: #fff; border-radius: 6px; padding: 2px 7px; background: var(--c); }
+  .route .nm { font-family: var(--display); font-size: clamp(16px, 2.6vw, 20px); color: var(--ink); line-height: 1.2; }
+  .route .train { display: block; text-align: center; margin-top: 14px; font-size: 14px; color: var(--muted); }
+
+  /* photos */
+  figure { margin: 28px 0; }
+  figure img { border-radius: 18px; box-shadow: 0 10px 30px rgba(22, 24, 29, .1); }
+  figcaption { font-size: 15px; color: var(--muted); margin-top: 10px; }
+  .wide { margin-left: calc(-1 * min(120px, (100vw - 720px) / 2 + 20px)); margin-right: calc(-1 * min(120px, (100vw - 720px) / 2 + 20px)); }
+  @media (max-width: 760px) { .wide { margin-left: 0; margin-right: 0; } }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start; }
+  .grid figure { margin: 0; }
+  @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
+
+  /* notes */
+  .tips { background: #fff; border-radius: 20px; padding: 22px 24px; box-shadow: 0 1px 0 var(--line); }
+  .tips ol { margin: 0; padding-left: 22px; color: var(--ink-2); }
+  .tips li { margin: 6px 0; }
+  .note { border-left: 6px solid var(--cc); background: #fff6e6; border-radius: 0 16px 16px 0; padding: 18px 22px; font-size: 16px; }
+  .note p { margin: 0 0 8px; color: var(--ink-2); }
+  .note p:last-child { margin: 0; }
+
+  .hello { display: flex; gap: 12px; flex-wrap: wrap; }
+  .hello a {
+    display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); background: #fff;
+    padding: 12px 18px; border-radius: 14px; box-shadow: 0 1px 0 var(--line), 0 4px 14px rgba(22, 24, 29, .06); font-weight: 600;
+  }
+  .hello svg { width: 20px; height: 20px; }
+
+  .ride { margin: 56px 0 8px; text-align: center; background: var(--night); color: #fff; border-radius: 26px; padding: 40px 24px; }
+  .ride h2 { justify-content: center; margin: 0 0 8px; }
+  .ride p { color: #b9bec7; margin: 0 0 24px; }
+  .ride .cta { display: inline-block; margin: 0; font-size: 22px; padding: 16px 30px; box-shadow: 0 6px 0 #006b31; }
+
+  footer { max-width: 720px; margin: 0 auto; padding: 28px 20px 48px; font-size: 14px; color: var(--muted); }
+  footer p { color: var(--muted); margin: 0 0 8px; }
+</style>
+</head>
+<body>
+<div class="stripe"></div>
+<nav>
+  <a class="home" href="./">
+    <span class="logo" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2.5" width="14" height="15" rx="4"/><path d="M5 10h14"/><circle cx="9" cy="13.8" r=".6" fill="#fff"/><circle cx="15" cy="13.8" r=".6" fill="#fff"/><path d="M8 21l2-3.5M16 21l-2-3.5"/></svg></span>
+    MRT Announcements
+  </a>
+  <a class="cta" href="./">Open the map</a>
+</nav>
+
+<header class="hero">
+  <svg viewBox="0 0 1200 500" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <path d="M-50 60 C 300 30, 500 120, 800 90 S 1100 30, 1250 60" stroke="#9d5b25" stroke-width="12" fill="none"/>
+    <path d="M-50 440 C 300 470, 520 390, 800 420 S 1100 480, 1250 450" stroke="#fa9e0d" stroke-width="12" fill="none"/>
+    <path d="M-50 480 C 320 500, 560 440, 820 465 S 1120 520, 1250 495" stroke="#005ec4" stroke-width="12" fill="none"/>
+  </svg>
+  <div class="in">
+    <div class="eyebrow">Our story</div>
+    <h1>Why I built a talking MRT map for my son</h1>
+    <p>A three-year-old, a weekly ride on the yellow line, and a birthday party where the fare gates opened to cake.</p>
+  </div>
+</header>
+
+<main>
+  <p class="lead">Hi, I'm Kavya. My son is three, and the Singapore MRT is his whole world.</p>
+  <p>He listens for the chime, waits for the lady to say the name of the next station, and says it right along with her. I wanted to give him a way to hear those announcements at home, whenever he likes.</p>
+
+  <h2><span class="code" style="--c: var(--cc)">CC</span> Where it started</h2>
+  <p>Every week we took the train from Botanic Gardens to Holland Village for his toddler class. It's only two stops on the Circle Line, but for him it was the best part of the day: the doors closing, the chime, "Farrer Road", and then "Holland Village". The Circle Line is officially orange, but in our house it will always be <em>the yellow line</em>, and it is his absolute favourite.</p>
+
+  <div class="route" role="img" aria-label="Circle Line route from Botanic Gardens through Farrer Road to Holland Village">
+    <ol>
+      <li class="ix"><div class="dot"></div><div class="codes"><span class="badge" style="--c: var(--dt)">DT9</span><span class="badge" style="--c: var(--cc)">CC19</span></div><div class="nm">Botanic Gardens</div></li>
+      <li><div class="dot"></div><div class="codes"><span class="badge" style="--c: var(--cc)">CC20</span></div><div class="nm">Farrer Road</div></li>
+      <li><div class="dot"></div><div class="codes"><span class="badge" style="--c: var(--cc)">CC21</span></div><div class="nm">Holland Village</div></li>
+    </ol>
+    <span class="train">Our weekly ride: two stops, a lot of excitement</span>
+  </div>
+
+  <h2><span class="code" style="--c: var(--ns)">3</span> An MRT-themed birthday</h2>
+  <p>So of course, when he turned three, the party had to be MRT-themed. We made our own map on the wall with coloured tape, with station signs for the places that matter to him and photos of him at each one. There was a fare gate with a big green button to press. The kitchen had an SMRT train drawing, and instead of the usual "no eating or drinking" signs, ours said <em>please</em> eat and drink.</p>
+
+  <figure class="wide">
+    <img src="images/party-wall-map.jpg" width="1600" height="1080" loading="lazy" alt="An MRT map made of coloured tape on a grey wall, with station signs for Bukit Panjang, Cashew, Beauty World, Botanic Gardens, Farrer Road and Holland Village, and small photos next to each station">
+    <figcaption>Our tape-and-paper MRT map, with his stations and the photos from each one (faces blurred).</figcaption>
+  </figure>
+
+  <div class="grid">
+    <figure>
+      <img src="images/party-fare-gate.jpg" width="1100" height="1047" loading="lazy" alt="A printed photo of MRT fare gates on the wall, with a big green 'Press me' button next to it">
+      <figcaption>The party entrance: tap in with the big green button.</figcaption>
+    </figure>
+    <figure>
+      <img src="images/party-signs.jpg" width="900" height="1274" loading="lazy" alt="MRT-style signs saying Please Eat and Drink, Dance and Play, Make Memories and Enjoy the Party">
+      <figcaption>Our take on the MRT's famous signs.</figcaption>
+    </figure>
+  </div>
+
+  <figure>
+    <img src="images/party-train-drawing.jpg" width="1400" height="683" loading="lazy" alt="A colourful drawing of an SMRT train on its tracks, with a sun, flowers, butterflies and bees">
+    <figcaption>An SMRT train, drawn for the party, in the sunshine with flowers and bees.</figcaption>
+  </figure>
+
+  <h2><span class="code" style="--c: var(--ew)">&#9654;</span> Why this website</h2>
+  <p>After the party, he wanted the announcements every day. So I built him a map he can use himself on the iPad. He taps a station, hears it announced, and then hears the doors close, just like on the train. He can pinch to zoom in on his favourite parts of the network, and tap a line colour to follow just that line.</p>
+  <p>The stations on our route have real announcements that I recorded on board and cleaned up so the train noise doesn't drown them out. Every other station uses a voice that I tuned to sound as close to the announcer as I could get, with the pronunciation of every name checked by ear.</p>
+  <p>The map is redrawn by hand from the official system map, in a reconstruction of the typeface used on Singapore's transport signs. I built it with a lot of help from an AI coding assistant, one station at a time.</p>
+
+  <h2><span class="code" style="--c: var(--dt)">&#9829;</span> For other little MRT fans</h2>
+  <p>If your child loves the MRT as much as mine does, I hope this makes them smile. A few tips for using it on an iPad:</p>
+  <div class="tips">
+    <ol>
+      <li><strong>Turn the sound up</strong>, and tap <em>Let's ride</em> to start. iPads only allow sound after a first tap.</li>
+      <li><strong>Add it to the Home Screen</strong> (Share button, then <em>Add to Home Screen</em>). It then opens full-screen like an app.</li>
+      <li><strong>Turn on Guided Access</strong> (Settings, then Accessibility) if you'd like little hands to stay on the map.</li>
+    </ol>
+  </div>
+
+  <div class="ride">
+    <h2>Ready to ride?</h2>
+    <p>143 stations, six lines, and a lot of doors closing.</p>
+    <a class="cta" href="./">Open the map</a>
+  </div>
+
+  <h2>Say hello</h2>
+  <p>I'd love to hear from other MRT-loving families, or about a station that doesn't sound right.</p>
+  <div class="hello">
+    <a href="https://www.linkedin.com/in/kavya-jahagirdar/" target="_blank" rel="noopener me">
+      <svg viewBox="0 0 24 24" fill="#0a66c2" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>
+      LinkedIn
+    </a>
+    <a href="https://x.com/kavyaj93" target="_blank" rel="noopener me">
+      <svg viewBox="0 0 24 24" fill="#000" aria-hidden="true"><path d="M18.24 2.25h3.31l-7.23 8.26 8.5 11.24h-6.66l-5.21-6.82-5.97 6.82H1.67l7.73-8.84L1.25 2.25h6.83l4.71 6.23 5.45-6.23zm-1.16 17.52h1.83L7.08 4.13H5.12l11.96 15.64z"/></svg>
+      @kavyaj93
+    </a>
+  </div>
+
+  <h2 style="font-size: 22px; margin-top: 48px;">A note on the sounds</h2>
+  <div class="note">
+    <p>This is an unofficial fan project made for my son, and it isn't affiliated with or endorsed by the Land Transport Authority, SMRT or SBS Transit.</p>
+    <p>The chime, the door-closing sound and the station announcements recorded on board belong to their operators. They're used here non-commercially, only to bring a little joy to young train fans. If you own these sounds and would like anything changed or removed, please get in touch and I'll take care of it straight away.</p>
+  </div>
+</main>
+
+<footer>
+  <p>Typeface: <a href="https://github.com/jglim/IdentityFont" target="_blank" rel="noopener">IdentityFont</a> by jglim, a reconstruction of the LTA Identity typeface. Map redrawn by hand.</p>
+  <p>Made with love in Singapore.</p>
+</footer>
+<div class="stripe"></div>
+</body>
+</html>
