@@ -371,6 +371,9 @@
 // Later: serve audio from the GitHub repo via jsDelivr, e.g. "https://cdn.jsdelivr.net/gh/<user>/<repo>@main/audio/"
 const AUDIO_BASE = "audio/";
 const DOORS = "doors-closing.mp3";
+// Where things happen inside doors-closing.mp3 (ms): chime, then the voice, then the beeps.
+// The doors slide shut during the beeps, like on the train.
+const DOOR_CUES = { voice: 2150, beepsStart: 3550, beepsEnd: 4700 };
 
 const LINE_INFO = [
   ["NS", "North-South Line"], ["EW", "East-West Line"], ["NE", "North East Line"],
@@ -592,9 +595,11 @@ function announce(name) {
   play(clip).then(([speech, doors]) => {
     const total = speech + doors;
     p.style.setProperty("--dur", total + "ms");
-    p.style.setProperty("--close", Math.min(doors, 2600) + "ms");
+    p.style.setProperty("--close", (DOOR_CUES.beepsEnd - DOOR_CUES.beepsStart) + "ms");
     requestAnimationFrame(() => p.classList.add("run"));
-    timers.push(setTimeout(() => { p.querySelector(".k").textContent = "Doors closing"; p.classList.add("closing"); }, speech));
+    const doorsAt = speech + 50;                   // audio is scheduled 50 ms ahead
+    timers.push(setTimeout(() => { p.querySelector(".k").textContent = "Doors closing"; }, doorsAt + DOOR_CUES.voice));
+    timers.push(setTimeout(() => p.classList.add("closing"), doorsAt + DOOR_CUES.beepsStart));
     timers.push(setTimeout(() => { p.classList.remove("show"); $("fx").replaceChildren(); }, total + 1400));
   });
 }
