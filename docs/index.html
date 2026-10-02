@@ -101,13 +101,9 @@
   .line { fill: none; stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; transition: opacity .3s; }
   .stn { fill: #fff; stroke-width: 3; }
   .ix { fill: #fff; stroke: var(--ink); stroke-width: 2.6; }
-  .halo { opacity: .28; transform-box: fill-box; transform-origin: center; animation: breathe 2.4s ease-in-out infinite; }
-  @keyframes breathe { 0%, 100% { transform: scale(.75); opacity: .35; } 50% { transform: scale(1.15); opacity: .12; } }
   .lbl { font-size: 10px; fill: var(--ink-2); paint-order: stroke; stroke: var(--land); stroke-width: 3px; stroke-linejoin: round; transition: opacity .3s; }
   .lbl.ixl { font-size: 11px; fill: var(--ink); }
-  .lbl.has { fill: var(--ink); font-size: 11.5px; }
   .dim { opacity: .12; }
-  .halo.dim { visibility: hidden; }
   .ring { fill: none; stroke-width: 4; transform-box: fill-box; transform-origin: center; animation: ripple 1.3s ease-out infinite; }
   @keyframes ripple { from { transform: scale(1); opacity: .9; } to { transform: scale(3.4); opacity: 0; } }
   .picked { transform-box: fill-box; transform-origin: center; animation: pop .35s cubic-bezier(.3, 1.6, .5, 1); }
@@ -281,7 +277,6 @@
     <g id="landG"></g>
     <g id="casings"></g>
     <g id="lines"></g>
-    <g id="halos"></g>
     <g id="stations"></g>
     <g id="labels"></g>
     <g id="fx"></g>
@@ -352,12 +347,11 @@
   <div class="sheet">
     <h3>MRT Announcements</h3>
     <p>Tap any station to hear its on-board announcement, followed by the doors closing. Pinch to zoom, drag to move around, and tap a line colour to follow just that line.</p>
-    <p>Stations that softly glow have a real recording. More are being added ride by ride.</p>
     <h4>Lines</h4>
     <div class="legend" id="legend"></div>
     <h4>Credits</h4>
     <p>Typeface: <a href="https://github.com/jglim/IdentityFont" target="_blank" rel="noopener">IdentityFont</a> by jglim, a reconstruction of the LTA Identity typeface.</p>
-    <p>Map redrawn by hand for this page. Stations that glow use real announcements recorded on board; the rest use a voice matched to the announcer.</p>
+    <p>Map redrawn by hand for this page. Announcements recorded on board, with a voice matched to the announcer for stations without a recording yet.</p>
     <p>An unofficial fan project, made for a 3-year-old MRT fan. Not affiliated with LTA, SMRT or SBS Transit. The chime, door-closing sound and on-board announcements belong to their operators and are used here non-commercially.</p>
     <p><a href="story.html">Read the story behind it</a> · <a href="https://www.linkedin.com/in/kavya-jahagirdar/" target="_blank" rel="noopener">LinkedIn</a> · <a href="https://x.com/kavyaj93" target="_blank" rel="noopener">X</a></p>
     <button class="close" id="closeAbout">Back to the map</button>
@@ -427,15 +421,14 @@ for (const l of LINES) for (const [, s] of l.stops) (stationLines[s] ??= new Set
 
 const stationEls = [];                            // [name, element] for dimming
 for (const [name, [x, y, side]] of Object.entries(ST)) {
-  const codes = CODES[name], isIx = codes.length > 1, has = !!RECORDINGS[name];
+  const codes = CODES[name], isIx = codes.length > 1;
   const color = lineColor(codes[0]);
-  if (has) stationEls.push([name, el("circle", { cx: x, cy: y, r: 13, class: "halo", fill: color }, $("halos"))]);
   const g = el("g", {}, $("stations"));
   if (isIx) el("circle", { cx: x, cy: y, r: 8, class: "ix" }, g);
-  else el("circle", { cx: x, cy: y, r: has ? 6.5 : 5.5, class: "stn", stroke: color }, g);
+  else el("circle", { cx: x, cy: y, r: 5.5, class: "stn", stroke: color }, g);
   const off = isIx ? 12 : 9;
   const [tx, ty, anchor] = { r: [x + off, y + 4, "start"], l: [x - off, y + 4, "end"], t: [x, y - off - 2, "middle"], b: [x, y + off + 10, "middle"] }[side];
-  const t = el("text", { x: tx, y: ty, "text-anchor": anchor, class: "lbl" + (isIx ? " ixl" : "") + (has ? " has" : "") }, $("labels"));
+  const t = el("text", { x: tx, y: ty, "text-anchor": anchor, class: "lbl" + (isIx ? " ixl" : "") }, $("labels"));
   t.textContent = name;
   stationEls.push([name, g], [name, t]);
 }
