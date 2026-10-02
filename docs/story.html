@@ -102,6 +102,8 @@
   /* photos */
   figure { margin: 28px 0; }
   figure img { border-radius: 18px; box-shadow: 0 10px 30px rgba(22, 24, 29, .1); }
+  .portrait img { max-width: 460px; width: 100%; margin: 0 auto; }
+  .portrait figcaption { text-align: center; }
   figcaption { font-size: 15px; color: var(--muted); margin-top: 10px; }
   .wide { margin-left: calc(-1 * min(120px, (100vw - 720px) / 2 + 20px)); margin-right: calc(-1 * min(120px, (100vw - 720px) / 2 + 20px)); }
   @media (max-width: 760px) { .wide { margin-left: 0; margin-right: 0; } }
@@ -196,8 +198,17 @@
     <figcaption>An SMRT train, drawn for the party, in the sunshine with flowers and bees.</figcaption>
   </figure>
 
+  <h2><span class="code" style="--c: var(--ne)">?</span> The idea</h2>
+  <p>Recently, I caught my son looking at the MRT map he has at home. He was staring at the stations, trying to make sense of them.</p>
+  <p>He can't fully read yet, so I thought: what if I found a way for him to explore the map on his own?</p>
+
+  <figure class="portrait">
+    <img src="images/exploring-the-map.jpg" width="1100" height="1467" loading="lazy" alt="A child pointing at stations on a printed Singapore MRT system map on a table, next to a handwritten 'MRT Map' label">
+    <figcaption>Exploring the MRT map at home (face blurred).</figcaption>
+  </figure>
+
   <h2><span class="code" style="--c: var(--ew)">&#9654;</span> Why this website</h2>
-  <p>After the party, he wanted the announcements every day. So I built him a map he can use himself on the iPad. He taps a station, hears it announced, and then hears the doors close, just like on the train. He can pinch to zoom in on his favourite parts of the network, and tap a line colour to follow just that line.</p>
+  <p>So I built him a map he can use himself on the iPad. He taps a station, hears it announced, and then hears the doors close, just like on the train. He can pinch to zoom in on his favourite parts of the network, and tap a line colour to follow just that line.</p>
   <p>The stations on our route have real announcements that I recorded on board and cleaned up so the train noise doesn't drown them out. Every other station uses a voice that I tuned to sound as close to the announcer as I could get, with the pronunciation of every name checked by ear.</p>
   <p>The map is redrawn by hand from the official system map, in a reconstruction of the typeface used on Singapore's transport signs. I built it with a lot of help from an AI coding assistant (thanks Claude, you're da best!), one station at a time.</p>
 
