@@ -208,6 +208,46 @@
   @keyframes flash { 50% { box-shadow: inset 0 0 0 3px var(--amber); } }
   @media (max-width: 520px) { #panel .doors { width: 84px; padding-right: 12px; } .door-frame { width: 58px; height: 74px; } }
 
+  @media (max-width: 560px) {
+    .brand { padding: 6px; } .brand > div:last-child { display: none; }
+    #bar { gap: 8px; } .round { width: 48px; height: 48px; } .round.story { width: 48px; }
+  }
+
+  /* ================= language + train sounds ================= */
+  .round.lang { font-family: var(--ui); font-weight: 700; font-size: 15px; }
+  #langMenu {
+    position: fixed; z-index: 6; top: calc(78px + var(--safe-t)); right: calc(12px + var(--safe-r));
+    display: none; flex-direction: column; gap: 4px; padding: 8px; border-radius: 18px; background: #fff; box-shadow: var(--shadow);
+  }
+  #langMenu.show { display: flex; }
+  #langMenu button { border: 0; background: none; text-align: left; font-family: var(--ui); font-size: 18px; padding: 12px 18px; border-radius: 12px; }
+  #langMenu button.on { background: #eef2f6; font-weight: 700; }
+  #sounds {
+    position: fixed; z-index: 5; left: 50%; bottom: 0; width: min(760px, 100%); transform: translate(-50%, 105%);
+    transition: transform .4s cubic-bezier(.2, .9, .25, 1.05); background: #fff; border-radius: 28px 28px 0 0;
+    box-shadow: 0 -10px 40px rgba(22, 24, 29, .2); padding: 18px 18px calc(22px + var(--safe-b));
+  }
+  #sounds.show { transform: translate(-50%, 0); }
+  .sheet-head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .sheet-head h3 { margin: 0; font-weight: normal; font-size: 24px; }
+  .seg { display: flex; background: #eef2f6; border-radius: 14px; padding: 4px; margin-left: auto; }
+  .seg button { border: 0; background: none; font-family: var(--ui); font-size: 15px; font-weight: 600; padding: 8px 12px; border-radius: 10px; color: var(--ink-2); }
+  .seg button.on { background: #fff; color: var(--ink); box-shadow: var(--shadow-sm); }
+  .sheet-head .x { border: 0; background: #eef2f6; width: 40px; height: 40px; border-radius: 50%; font-size: 24px; line-height: 1; flex: none; }
+  .tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+  .tile {
+    position: relative; border: 0; border-radius: 20px; padding: 16px 14px 14px; min-height: 120px; text-align: left;
+    background: var(--c); color: #fff; display: flex; flex-direction: column; justify-content: space-between; gap: 8px;
+    box-shadow: 0 5px 0 rgba(0, 0, 0, .18); transition: transform .1s, box-shadow .1s;
+  }
+  .tile:active { transform: translateY(4px); box-shadow: 0 1px 0 rgba(0, 0, 0, .18); }
+  .tile .emoji { font-size: 34px; line-height: 1; }
+  .tile .t { font-size: 17px; line-height: 1.2; }
+  .tile .only { position: absolute; top: 12px; right: 12px; font-family: var(--ui); font-size: 11px; font-weight: 700; background: rgba(255,255,255,.25); border-radius: 6px; padding: 2px 6px; }
+  .tile.playing { animation: wiggle .5s ease-in-out infinite alternate; }
+  @keyframes wiggle { from { transform: rotate(-1.2deg) scale(1.02); } to { transform: rotate(1.2deg) scale(1.02); } }
+  @media (max-width: 520px) { .seg button { padding: 8px 8px; font-size: 14px; } .sheet-head h3 { font-size: 20px; } }
+
   /* ================= hint toast ================= */
   #hint {
     position: fixed; z-index: 2; left: 50%; bottom: calc(24px + var(--safe-b)); transform: translateX(-50%);
@@ -297,6 +337,10 @@
   <button class="round" id="fit" aria-label="Show the whole map">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
   </button>
+  <button class="round lang" id="langBtn" aria-label="Announcement language" aria-haspopup="true"><span id="langLabel">EN</span></button>
+  <button class="round" id="soundsBtn" aria-label="Train sounds" title="Train sounds">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5v5h3.5L13 19V5L7.5 9.5H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg>
+  </button>
   <a class="round story" href="story.html" aria-label="Our story" title="Our story">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5s-7.5-4.4-7.5-10A4.3 4.3 0 0 1 12 8a4.3 4.3 0 0 1 7.5 2.5c0 5.6-7.5 10-7.5 10z"/></svg>
     <span>Our story</span>
@@ -318,6 +362,26 @@
     <div class="track"><div class="fill"></div><div class="train"></div></div>
   </div>
   <div class="doors"><div class="door-frame"><div class="leaf l"></div><div class="leaf r"></div></div></div>
+</section>
+
+<!-- ================= language menu ================= -->
+<div id="langMenu" role="menu" aria-label="Announcement language">
+  <button data-lang="en" role="menuitemradio">English</button>
+  <button data-lang="zh" role="menuitemradio">中文</button>
+  <button data-lang="ms" role="menuitemradio">Bahasa Melayu</button>
+  <button data-lang="ta" role="menuitemradio">தமிழ்</button>
+</div>
+
+<!-- ================= train sounds ================= -->
+<section id="sounds" role="dialog" aria-label="Train sounds">
+  <div class="sheet-head">
+    <h3>Train sounds</h3>
+    <div class="seg" id="langSeg" role="radiogroup" aria-label="Language">
+      <button data-lang="en">EN</button><button data-lang="zh">中文</button><button data-lang="ms">BM</button><button data-lang="ta">தமிழ்</button>
+    </div>
+    <button class="x" id="closeSounds" aria-label="Close">&times;</button>
+  </div>
+  <div class="tiles" id="tiles"></div>
 </section>
 
 <!-- ================= start screen ================= -->
@@ -346,12 +410,12 @@
 <section id="about" role="dialog" aria-label="About">
   <div class="sheet">
     <h3>MRT Announcements</h3>
-    <p>Tap any station to hear its on-board announcement, followed by the doors closing. Pinch to zoom, drag to move around, and tap a line colour to follow just that line.</p>
+    <p>Tap any station to hear its on-board announcement, followed by the doors closing. Pinch to zoom, drag to move around, and tap a line colour to follow just that line. The speaker button opens more train sounds, and the language button plays them in English, 中文, Bahasa Melayu or தமிழ்.</p>
     <h4>Lines</h4>
     <div class="legend" id="legend"></div>
     <h4>Credits</h4>
     <p>Typeface: <a href="https://github.com/jglim/IdentityFont" target="_blank" rel="noopener">IdentityFont</a> by jglim, a reconstruction of the LTA Identity typeface.</p>
-    <p>Map redrawn by hand for this page. Announcements recorded on board, with a voice matched to the announcer for stations without a recording yet.</p>
+    <p>Map redrawn by hand for this page. Station announcements and train sounds are on-board recordings shared by <a href="https://www.youtube.com/@WKX076" target="_blank" rel="noopener">WKX 076</a>, plus a few of our own; a voice matched to the announcer fills in stations without a recording yet.</p>
     <p>An unofficial fan project, made for a 3-year-old MRT fan. Not affiliated with LTA, SMRT or SBS Transit. The chime, door-closing sound and on-board announcements belong to their operators and are used here non-commercially.</p>
     <p><a href="story.html">Read the story behind it</a> · <a href="https://www.linkedin.com/in/kavya-jahagirdar/" target="_blank" rel="noopener">LinkedIn</a> · <a href="https://x.com/kavyaj93" target="_blank" rel="noopener">X</a></p>
     <button class="close" id="closeAbout">Back to the map</button>
@@ -361,6 +425,8 @@
 <script src="network.js"></script>
 <script src="recordings.js"></script>
 <script src="names.js"></script>
+<script src="next.js"></script>
+<script src="extras.js"></script>
 <script>
 // Later: serve audio from the GitHub repo via jsDelivr, e.g. "https://cdn.jsdelivr.net/gh/<user>/<repo>@main/audio/"
 const AUDIO_BASE = "audio/";
@@ -569,7 +635,8 @@ function announce(name) {
   const p = $("panel");
   p.style.setProperty("--c", color);
   p.classList.remove("run", "closing", "show");
-  p.querySelector(".k").textContent = rec && rec.kind === "next" ? "Next station" : "Arriving at";
+  const real = typeof NEXT_CLIPS !== "undefined" && NEXT_CLIPS[name];
+  p.querySelector(".k").textContent = real || (rec && rec.kind === "next") ? "Next station" : "Arriving at";
   p.querySelector(".name").textContent = name;
   p.querySelector(".codes").replaceChildren(...codes.map(c => {
     const b = document.createElement("span");
@@ -583,8 +650,8 @@ function announce(name) {
   // count station taps in GoatCounter (anonymous; shows which stations are favourites)
   if (window.goatcounter && goatcounter.count) goatcounter.count({ path: "station/" + name, title: name, event: true });
 
-  // real on-board recording if we have one, otherwise the spoken station name
-  const clip = rec ? rec.file : (typeof NAME_CLIPS !== "undefined" ? NAME_CLIPS[name] : null);
+  // real on-board "Next station" announcement, else our own recording, else the spoken station name
+  const clip = real || (rec ? rec.file : (typeof NAME_CLIPS !== "undefined" ? NAME_CLIPS[name] : null));
   play(clip).then(([speech, doors]) => {
     const total = speech + doors;
     p.style.setProperty("--dur", total + "ms");
@@ -617,6 +684,65 @@ async function play(file) {
   }
   return out;
 }
+
+// ---------- train sounds + language ----------
+const LANGS = { en: "EN", zh: "中文", ms: "BM", ta: "தமிழ்" };
+const EMOJI = { chime: "🔔", doors: "🚪", gap: "⚠️", lean: "🚫", centre: "🧍", bag: "👜", track: "🛤️" };
+const TILE_COLORS = ["#d42e12", "#009645", "#9900aa", "#fa9e0d", "#005ec4", "#9d5b25", "#4b5058"];
+const SOUNDS = [
+  { key: "chime", label: "Chime", icon: "chime", files: { en: "extras/chime.mp3" } },
+  { key: "doors", label: "Doors are closing", icon: "doors", files: { en: DOORS } },
+  ...Object.entries(typeof EXTRAS !== "undefined" ? EXTRAS : {}).map(([key, e]) => ({ key, label: e.label, icon: e.icon, files: e.files })),
+];
+let lang = "en";
+try { lang = localStorage.getItem("mrt-lang") || "en"; } catch {}
+if (!LANGS[lang]) lang = "en";
+
+function setLang(l) {
+  lang = l;
+  try { localStorage.setItem("mrt-lang", l); } catch {}
+  $("langLabel").textContent = LANGS[l];
+  for (const b of document.querySelectorAll("#langMenu button, #langSeg button")) b.classList.toggle("on", b.dataset.lang === l);
+  renderTiles();
+}
+function renderTiles() {
+  $("tiles").replaceChildren(...SOUNDS.map((s, i) => {
+    const b = document.createElement("button");
+    b.className = "tile"; b.style.setProperty("--c", TILE_COLORS[i % TILE_COLORS.length]);
+    const words = s.key !== "chime";
+    b.innerHTML = `<span class="emoji">${EMOJI[s.icon] || "🔊"}</span><span class="t"></span>` +
+      (lang !== "en" && words && !s.files[lang] ? `<span class="only">EN</span>` : "");
+    b.querySelector(".t").textContent = s.label;
+    b.addEventListener("click", () => playSound(s, b));
+    return b;
+  }));
+}
+async function playSound(s, tile) {
+  const file = s.files[lang] || s.files.en;
+  $("panel").classList.remove("show"); timers.forEach(clearTimeout); timers = [];
+  for (const t of document.querySelectorAll(".tile.playing")) t.classList.remove("playing");
+  if (window.goatcounter && goatcounter.count) goatcounter.count({ path: "sound/" + s.key + "/" + (s.files[lang] ? lang : "en"), title: s.label, event: true });
+  const ms = await playOne(file);
+  tile.classList.add("playing");
+  timers.push(setTimeout(() => tile.classList.remove("playing"), ms));
+}
+async function playOne(file) {
+  sources.forEach(x => { try { x.stop(); } catch {} }); sources = [];
+  if (!ctx) return 0;
+  let buf;
+  try { buf = await load(file); } catch { return 0; }
+  const src = ctx.createBufferSource();
+  src.buffer = buf; src.connect(ctx.destination); src.start(ctx.currentTime + .03);
+  sources.push(src);
+  return buf.duration * 1000;
+}
+$("soundsBtn").addEventListener("click", () => { $("langMenu").classList.remove("show"); $("sounds").classList.toggle("show"); });
+$("closeSounds").addEventListener("click", () => $("sounds").classList.remove("show"));
+$("langBtn").addEventListener("click", e => { e.stopPropagation(); $("langMenu").classList.toggle("show"); });
+for (const b of document.querySelectorAll("#langMenu button, #langSeg button"))
+  b.addEventListener("click", () => { setLang(b.dataset.lang); $("langMenu").classList.remove("show"); });
+document.addEventListener("click", e => { if (!$("langMenu").contains(e.target) && !$("langBtn").contains(e.target)) $("langMenu").classList.remove("show"); });
+setLang(lang);
 
 // ---------- start / about ----------
 $("go").addEventListener("click", async () => {
