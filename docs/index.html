@@ -215,14 +215,6 @@
   }
 
   /* ================= language + train sounds ================= */
-  .round.lang { font-family: var(--ui); font-weight: 700; font-size: 15px; }
-  #langMenu {
-    position: fixed; z-index: 6; top: calc(78px + var(--safe-t)); right: calc(12px + var(--safe-r));
-    display: none; flex-direction: column; gap: 4px; padding: 8px; border-radius: 18px; background: #fff; box-shadow: var(--shadow);
-  }
-  #langMenu.show { display: flex; }
-  #langMenu button { border: 0; background: none; text-align: left; font-family: var(--ui); font-size: 18px; padding: 12px 18px; border-radius: 12px; }
-  #langMenu button.on { background: #eef2f6; font-weight: 700; }
   #sounds {
     position: fixed; z-index: 5; left: 50%; bottom: 0; width: min(760px, 100%); transform: translate(-50%, 105%);
     transition: transform .4s cubic-bezier(.2, .9, .25, 1.05); background: #fff; border-radius: 28px 28px 0 0;
@@ -237,15 +229,17 @@
   .sheet-head .x { border: 0; background: #eef2f6; width: 40px; height: 40px; border-radius: 50%; font-size: 24px; line-height: 1; flex: none; }
   .tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
   .tile {
-    position: relative; border: 0; border-radius: 20px; padding: 16px 14px 14px; min-height: 120px; text-align: left;
-    background: var(--c); color: #fff; display: flex; flex-direction: column; justify-content: space-between; gap: 8px;
-    box-shadow: 0 5px 0 rgba(0, 0, 0, .18); transition: transform .1s, box-shadow .1s;
+    position: relative; overflow: hidden; border: 1px solid #e6e8ec; border-radius: 18px; padding: 14px 14px 14px 18px;
+    min-height: 112px; text-align: left; background: #f7f8fa; color: var(--ink);
+    display: flex; flex-direction: column; justify-content: space-between; gap: 10px;
+    transition: transform .1s, border-color .2s, box-shadow .2s, background .2s;
   }
-  .tile:active { transform: translateY(4px); box-shadow: 0 1px 0 rgba(0, 0, 0, .18); }
-  .tile .emoji { font-size: 34px; line-height: 1; }
-  .tile .t { font-size: 17px; line-height: 1.2; }
-  .tile .only { position: absolute; top: 12px; right: 12px; font-family: var(--ui); font-size: 11px; font-weight: 700; background: rgba(255,255,255,.25); border-radius: 6px; padding: 2px 6px; }
-  .tile.playing { animation: wiggle .5s ease-in-out infinite alternate; }
+  .tile::before { content: ""; position: absolute; left: 0; top: 14px; bottom: 14px; width: 4px; border-radius: 0 4px 4px 0; background: var(--c); }
+  .tile:active { transform: scale(.97); }
+  .tile .emoji { width: 46px; height: 46px; border-radius: 14px; display: grid; place-items: center; font-size: 26px; line-height: 1; background: var(--tint); }
+  .tile .t { font-size: 16px; line-height: 1.25; color: var(--ink); }
+  .tile .only { position: absolute; top: 12px; right: 12px; font-family: var(--ui); font-size: 11px; font-weight: 700; color: var(--muted); background: #eceef2; border-radius: 6px; padding: 2px 6px; }
+  .tile.playing { background: #fff; border-color: var(--c); box-shadow: 0 0 0 3px var(--tint); animation: wiggle .5s ease-in-out infinite alternate; }
   @keyframes wiggle { from { transform: rotate(-1.2deg) scale(1.02); } to { transform: rotate(1.2deg) scale(1.02); } }
   @media (max-width: 520px) { .seg button { padding: 8px 8px; font-size: 14px; } .sheet-head h3 { font-size: 20px; } }
 
@@ -338,7 +332,6 @@
   <button class="round" id="fit" aria-label="Show the whole map">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
   </button>
-  <button class="round lang" id="langBtn" aria-label="Announcement language" aria-haspopup="true"><span id="langLabel">EN</span></button>
   <button class="round story" id="soundsBtn" aria-label="Train sounds" title="Train sounds">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#005ec4"><path d="M4 9.5v5h3.5L13 19V5L7.5 9.5H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg>
     <span>Train sounds</span>
@@ -365,14 +358,6 @@
   </div>
   <div class="doors"><div class="door-frame"><div class="leaf l"></div><div class="leaf r"></div></div></div>
 </section>
-
-<!-- ================= language menu ================= -->
-<div id="langMenu" role="menu" aria-label="Announcement language">
-  <button data-lang="en" role="menuitemradio">English</button>
-  <button data-lang="zh" role="menuitemradio">中文</button>
-  <button data-lang="ms" role="menuitemradio">Bahasa Melayu</button>
-  <button data-lang="ta" role="menuitemradio">தமிழ்</button>
-</div>
 
 <!-- ================= train sounds ================= -->
 <section id="sounds" role="dialog" aria-label="Train sounds">
@@ -703,14 +688,14 @@ if (!LANGS[lang]) lang = "en";
 function setLang(l) {
   lang = l;
   try { localStorage.setItem("mrt-lang", l); } catch {}
-  $("langLabel").textContent = LANGS[l];
-  for (const b of document.querySelectorAll("#langMenu button, #langSeg button")) b.classList.toggle("on", b.dataset.lang === l);
+  for (const b of document.querySelectorAll("#langSeg button")) b.classList.toggle("on", b.dataset.lang === l);
   renderTiles();
 }
 function renderTiles() {
   $("tiles").replaceChildren(...SOUNDS.map((s, i) => {
     const b = document.createElement("button");
-    b.className = "tile"; b.style.setProperty("--c", TILE_COLORS[i % TILE_COLORS.length]);
+    const c = TILE_COLORS[i % TILE_COLORS.length];
+    b.className = "tile"; b.style.setProperty("--c", c); b.style.setProperty("--tint", c + "24");
     const words = s.key !== "chime";
     b.innerHTML = `<span class="emoji">${EMOJI[s.icon] || "🔊"}</span><span class="t"></span>` +
       (lang !== "en" && words && !s.files[lang] ? `<span class="only">EN</span>` : "");
@@ -738,12 +723,9 @@ async function playOne(file) {
   sources.push(src);
   return buf.duration * 1000;
 }
-$("soundsBtn").addEventListener("click", () => { $("langMenu").classList.remove("show"); $("sounds").classList.toggle("show"); });
+$("soundsBtn").addEventListener("click", () => $("sounds").classList.toggle("show"));
 $("closeSounds").addEventListener("click", () => $("sounds").classList.remove("show"));
-$("langBtn").addEventListener("click", e => { e.stopPropagation(); $("langMenu").classList.toggle("show"); });
-for (const b of document.querySelectorAll("#langMenu button, #langSeg button"))
-  b.addEventListener("click", () => { setLang(b.dataset.lang); $("langMenu").classList.remove("show"); });
-document.addEventListener("click", e => { if (!$("langMenu").contains(e.target) && !$("langBtn").contains(e.target)) $("langMenu").classList.remove("show"); });
+for (const b of document.querySelectorAll("#langSeg button")) b.addEventListener("click", () => setLang(b.dataset.lang));
 setLang(lang);
 
 // ---------- start / about ----------
