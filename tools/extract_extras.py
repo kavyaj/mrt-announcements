@@ -20,9 +20,9 @@ EXTRAS = {
     "mind-gap":  ("Please mind the gap", "gap", "NE",
                   {"en": (178.78, 180.27), "zh": (180.3, 182.12), "ms": (182.2, 184.45), "ta": (184.55, 188.78)}),
     "no-lean":   ("Please do not lean against the train doors", "lean", "CC", {"en": (83.3, 86.4)}),
-    "centre":    ("Please move to the centre of the car", "centre", "NE", {"en": (27.45, 37.2)}),
+    "centre":    ("Please move to the centre of the car", "centre", "NE", {"en": (32.85, 37.15)}),
     "belongings": ("Please do not leave your belongings unattended", "bag", "DT",
-                  {"en": (136.47, 151.5), "zh": (151.55, 168.53), "ms": (168.53, 183.91), "ta": (183.91, 202.03)}),
+                  {"en": (136.47, 151.5), "zh": (151.55, 168.53), "ms": (168.53, 184.2), "ta": (184.8, 205.35)}),
     "track":     ("Track crossing ahead, please hold on", "track", "EW", {"en": (94.35, 100.0)}),
 }
 
