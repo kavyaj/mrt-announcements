@@ -13,7 +13,9 @@ SR = 48000
 MAX_GAP, KEEP_GAP = .6, .3
 FRAME = .02
 _model = None
-TIGHT = "--tight" in sys.argv          # always cut at the quietest instant right before "next"
+TIGHT = "--tight" in sys.argv          # always cut at the quietest instant right before the first word
+# words a clip should start with (station clips: "next"; interchange clips: --words=change,passengers,cross)
+STARTS = next((a.split("=", 1)[1].split(",") for a in sys.argv if a.startswith("--words=")), ["next", "mixed", "nixed", "neck"])
 
 
 def model():
@@ -39,7 +41,7 @@ def tighten(path):
     y16 = librosa.resample(y, orig_sr=SR, target_sr=16000)
     segs, _ = model().transcribe(y16, language="en", word_timestamps=True, vad_filter=False, condition_on_previous_text=False)
     words = [w for s in segs for w in (s.words or [])]
-    nxt = next((w for w in words if w.word.strip().lower().strip(",.").startswith(("next", "mixed", "nixed", "neck")))
+    nxt = next((w for w in words if w.word.strip().lower().strip(",.").startswith(tuple(STARTS)))
            , None)
     cut_at, silent = 0.0, []
     if nxt is not None and nxt.start > .15:
@@ -80,5 +82,5 @@ def tighten(path):
 if __name__ == "__main__":
     for p in [a for a in sys.argv[1:] if not a.startswith("--")]:
         cut, shrunk, first = tighten(p)
-        flag = "" if first.lower().startswith("next") or cut > 0 else "   <-- no 'next' found"
+        flag = "" if first.lower().startswith(tuple(STARTS)) or cut > 0 else "   <-- start word not found"
         print(f"{os.path.basename(p):34s} trimmed {cut:4.2f}s at start, {shrunk:4.2f}s of pauses  | heard: {first}{flag}", flush=True)
