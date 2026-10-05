@@ -414,6 +414,7 @@
 <script src="names.js"></script>
 <script src="next.js"></script>
 <script src="extras.js"></script>
+<script src="transfers.js"></script>
 <script>
 // Later: serve audio from the GitHub repo via jsDelivr, e.g. "https://cdn.jsdelivr.net/gh/<user>/<repo>@main/audio/"
 const AUDIO_BASE = "audio/";
@@ -639,7 +640,11 @@ function announce(name) {
 
   // real on-board "Next station" announcement, else our own recording, else the spoken station name
   const clip = real || (rec ? rec.file : (typeof NAME_CLIPS !== "undefined" ? NAME_CLIPS[name] : null));
-  play(clip).then(([speech, doors]) => {
+  // interchanges: the real "Change at the next station for ..." recorded right after this station's clip
+  const code = real && (real.match(/^next\/([A-Z]+\d+)-/) || [])[1];
+  const change = code && typeof TRANSFER_CLIPS !== "undefined" ? TRANSFER_CLIPS[code] : null;
+  play(change ? [clip, change] : [clip]).then(([speech, doors, parts]) => {
+    if (change && parts[0]) timers.push(setTimeout(() => { p.querySelector(".k").textContent = "Change here"; }, parts[0] + 50));
     const total = speech + doors;
     p.style.setProperty("--dur", total + "ms");
     p.style.setProperty("--close", (DOOR_CUES.beepsEnd - DOOR_CUES.beepsStart) + "ms");
@@ -655,21 +660,24 @@ function announce(name) {
 let ctx, sources = [];
 const buffers = {};
 const load = file => buffers[file] ??= fetch(AUDIO_BASE + file).then(r => r.arrayBuffer()).then(b => ctx.decodeAudioData(b));
-async function play(file) {
+// play the announcement part(s), then the doors closing; returns [speech ms, doors ms, ms per part]
+async function play(files) {
   sources.forEach(s => { try { s.stop(); } catch {} }); sources = [];
-  if (!ctx) return [0, 2500];
+  if (!ctx) return [0, 2500, []];
+  const parts = files.filter(Boolean);
   let bufs;
-  try { bufs = await Promise.all([file && load(file), load(DOORS)]); } catch { return [0, 2500]; }
-  const gap = .3, t0 = ctx.currentTime + .05;
-  let t = t0, out = [];
-  for (const buf of bufs) {
-    if (!buf) { out.push(0); continue; }
+  try { bufs = await Promise.all([...parts.map(load), load(DOORS)]); } catch { return [0, 2500, []]; }
+  const t0 = ctx.currentTime + .05;
+  let t = t0;
+  const ms = bufs.map((buf, i) => {
+    const gap = i < bufs.length - 2 ? .25 : .3;       // short pause between parts, a little more before the doors
     const src = ctx.createBufferSource();
     src.buffer = buf; src.connect(ctx.destination); src.start(t);
-    sources.push(src);
-    out.push((buf.duration + gap) * 1000); t += buf.duration + gap;
-  }
-  return out;
+    sources.push(src); t += buf.duration + gap;
+    return (buf.duration + gap) * 1000;
+  });
+  const doors = ms.pop();
+  return [ms.reduce((a, b) => a + b, 0), doors, ms];
 }
 
 // ---------- train sounds + language ----------

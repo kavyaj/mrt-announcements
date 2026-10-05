@@ -164,6 +164,14 @@ def refine(line, found, words, stations, total):
     return found
 
 
+def small_words_en(line, a, b):
+    """Like small_words, but English only and without the speech filter (more reliable word timings)."""
+    small_words(line, 0, 0) if _model is None else None
+    x = audio16(line)[int(max(0, a) * SR16):int(b * SR16)]
+    segs, _ = _model.transcribe(x, language="en", word_timestamps=True, condition_on_previous_text=False, vad_filter=False)
+    return [(w.word.strip(), round(a + w.start, 2), round(a + w.end, 2)) for s in segs for w in (s.words or [])]
+
+
 def audio16(line):
     if line not in _audio:
         raw = subprocess.run(["ffmpeg", "-v", "error", "-i", os.path.join(SRC, line + ".mp3"), "-ac", "1",
