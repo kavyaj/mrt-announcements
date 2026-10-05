@@ -409,12 +409,12 @@
   </div>
 </section>
 
-<script src="network.js?v=a1980e73"></script>
-<script src="recordings.js?v=a1980e73"></script>
-<script src="names.js?v=a1980e73"></script>
-<script src="next.js?v=a1980e73"></script>
-<script src="extras.js?v=a1980e73"></script>
-<script src="transfers.js?v=a1980e73"></script>
+<script src="network.js?v=a657abd7"></script>
+<script src="recordings.js?v=a657abd7"></script>
+<script src="names.js?v=a657abd7"></script>
+<script src="next.js?v=a657abd7"></script>
+<script src="extras.js?v=a657abd7"></script>
+<script src="transfers.js?v=a657abd7"></script>
 <script>
 // Later: serve audio from the GitHub repo via jsDelivr, e.g. "https://cdn.jsdelivr.net/gh/<user>/<repo>@main/audio/"
 const AUDIO_BASE = "audio/";
@@ -659,7 +659,7 @@ function announce(name) {
 // ---------- audio (Web Audio: gapless and reliable on iPad once unlocked) ----------
 let ctx, sources = [];
 const buffers = {};
-const BUILD = "a1980e73";                                 // set by tools/stamp_version.py: fresh audio after each update
+const BUILD = "a657abd7";                                 // set by tools/stamp_version.py: fresh audio after each update
 const load = file => buffers[file] ??= fetch(AUDIO_BASE + file + "?v=" + BUILD).then(r => r.arrayBuffer()).then(b => ctx.decodeAudioData(b));
 // play the announcement part(s), then the doors closing; returns [speech ms, doors ms, ms per part]
 async function play(files) {
