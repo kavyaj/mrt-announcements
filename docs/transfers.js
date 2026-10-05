@@ -20,7 +20,6 @@ const TRANSFER_CLIPS = {
  "DT16": "change/DT16-bayfront.mp3",
  "DT35": "change/DT35-expo.mp3",
  "DT9": "change/DT9-botanic-gardens.mp3",
- "EW12": "change/EW12-bugis.mp3",
  "EW2": "change/EW2-tampines.mp3",
  "EW21": "change/EW21-buona-vista.mp3",
  "EW24": "change/EW24-jurong-east.mp3",
