@@ -295,6 +295,16 @@
   .go:active { transform: translateY(8px); box-shadow: 0 2px 0 #006b31, 0 8px 20px rgba(0, 150, 69, .3); }
   .go .icon { width: 50px; height: 50px; border-radius: 50%; background: rgba(255, 255, 255, .18); display: grid; place-items: center; }
   .go svg { width: 30px; height: 30px; }
+  .hero .tip { margin: 44px auto 0; padding-top: 22px; max-width: 320px; border-top: 1px solid rgba(255, 255, 255, .12); font-family: var(--ui); }
+  .hero .tip span { display: block; margin-bottom: 14px; font-size: 15px; line-height: 1.5; color: #b9bec7; }
+  .tipbtn { display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 22px; border-radius: 999px; font-family: var(--ui); font-size: 16px; font-weight: 700; text-decoration: none; }
+  .hero .tipbtn { border: 2px solid var(--amber); color: var(--amber); }
+  .tipbtn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .sheet .tipblock { margin: 16px 0; padding: 16px 18px; background: #fff3da; border: 2px solid var(--amber); border-radius: 16px; }
+  .sheet .tipblock strong { display: block; margin-bottom: 4px; font-size: 18px; color: var(--ink); }
+  .sheet .tipblock p { margin: 0 0 12px; }
+  .sheet .tipbtn { background: var(--night); color: #fff; border-radius: 12px; }
+  .sheet .tipbtn svg { stroke: var(--amber); }
   .hero .fine a { color: #b9bec7; }
   .hero .fine { position: fixed; left: 0; right: 0; bottom: calc(18px + var(--safe-b)); font-family: var(--ui); font-size: 12px; color: #6f7580; }
 
@@ -411,6 +421,10 @@
       <span class="icon"><svg viewBox="0 0 24 24" fill="#fff"><path d="M8 5.5v13l11-6.5z"/></svg></span>
       Let's ride
     </button>
+    <div class="tip">
+      <span>Made for fun, and free. Tips keep it running (more reliably than the actual trains).</span>
+      <a class="tipbtn" href="https://ko-fi.com/kavyaj?ref=mrtannouncements" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h12v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V9z"/><path d="M16 10h2a2.5 2.5 0 0 1 0 5h-2"/><path d="M8 3v3M12 3v3"/></svg>Say thanks</a>
+    </div>
     <div class="fine">Turn the sound up 🔊 &nbsp;·&nbsp; <a href="story.html">Why I made this</a></div>
   </div>
 </section>
@@ -422,11 +436,15 @@
     <p>Tap any station to hear its on-board announcement, followed by the doors closing. Pinch to zoom, drag to move around, and tap a line colour to follow just that line. The speaker button opens more train sounds, and the language button plays them in English, 中文, Bahasa Melayu or தமிழ்.</p>
     <h4>Lines</h4>
     <div class="legend" id="legend"></div>
+    <div class="tipblock">
+      <strong>Made for fun, and free.</strong>
+      <p>Tips keep it running (more reliably than the actual trains).</p>
+      <a class="tipbtn" href="https://ko-fi.com/kavyaj?ref=mrtannouncements" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h12v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V9z"/><path d="M16 10h2a2.5 2.5 0 0 1 0 5h-2"/><path d="M8 3v3M12 3v3"/></svg>Say thanks</a>
+    </div>
     <h4>Credits</h4>
     <p>Typeface: <a href="https://github.com/jglim/IdentityFont" target="_blank" rel="noopener">IdentityFont</a> by jglim, a reconstruction of the LTA Identity typeface.</p>
     <p>Map redrawn by hand for this page. Station announcements and train sounds are on-board recordings shared by <a href="https://www.youtube.com/@WKX076" target="_blank" rel="noopener">WKX 076</a>, plus a few of our own; a voice matched to the announcer fills in stations without a recording yet.</p>
     <p>An unofficial fan project, made for a 3-year-old MRT fan. Not affiliated with LTA, SMRT or SBS Transit. The chime, door-closing sound and on-board announcements belong to their operators and are used here non-commercially.</p>
-    <p>Made for fun, and free. Tips keep it running (more reliably than the actual trains). <a href="https://ko-fi.com/kavyaj?ref=mrtannouncements" target="_blank" rel="noopener">Say thanks</a></p>
     <p><a href="story.html">Read the story behind it</a> ·<a href="https://www.linkedin.com/in/kavya-jahagirdar/" target="_blank" rel="noopener">LinkedIn</a> · <a href="https://x.com/kavyaj93" target="_blank" rel="noopener">X</a></p>
     <button class="close" id="closeAbout">Back to the map</button>
   </div>
